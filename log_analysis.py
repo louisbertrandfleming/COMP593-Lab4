@@ -13,12 +13,32 @@ Usage:
 
 '''
 
+### Imports
+import sys  # Need for sys.argv command line parameters
+import os  # Need for path handling
+
 def main():
-    log_file = get_log_file_path_from_cmd_line()
+    log_file = get_log_file_path_from_cmd_line()  # Get the file name (Step 3)
+    print(f"Analyzing file:\n  {log_file}")  # Test step 3 (we can comment out later)
 
 # TODO: Step 3
 def get_log_file_path_from_cmd_line():
-    return
+    '''Return the command line parameter giving the file name or path,
+    exit with error message if no parameter or if parameter is not a file.
+    '''
+    if len(sys.argv) > 1:  # there is at least one argument after the program name itself
+        # Get the path
+        filename = sys.argv[1]
+        if os.path.isfile(filename):  # Check if it's a file
+            return os.path.abspath(filename)  # Expand to full path in file system
+        else:
+            print("Name specified on the command line is not a file. Exiting...")
+            exit(0)  # Exit status code is only used in Linux/Unix systems, just leave at zero
+    else:
+        print("No file name specified on the command line. Exiting...")
+        exit(0)  # Exit status code is only used in Linux/Unix systems, just leave at zero
+    # No return statement here, all paths through the if-else statements
+    # end in a return or an exit. The return statement would be "dead code".
 
 # TODO: Steps 4-7
 def filter_log_by_regex(log_file, regex, ignore_case=True, print_summary=False, print_records=False):
