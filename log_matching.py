@@ -28,6 +28,7 @@ def filter_log_by_regex(log_file, regex, ignore_case=True, print_summary=False, 
     """
     # List of lines to be returned
     filtered_records = []  # start empty list
+    filtered_groups = []  # start empty list of match groups
 
     # Set the regex search flag for case sensitivity
     # Ref: https://docs.python.org/3/library/re.html#re.IGNORECASE
@@ -47,6 +48,8 @@ def filter_log_by_regex(log_file, regex, ignore_case=True, print_summary=False, 
                 # Add lines that match to list of filtered records
                 # And strip the \n from the end of the line before saving
                 filtered_records.append(record.strip())
+                if match.lastindex != 0:
+                    filtered_groups.append(match.groups())
 
     # Print all records, if enabled
     if print_records:
@@ -57,7 +60,7 @@ def filter_log_by_regex(log_file, regex, ignore_case=True, print_summary=False, 
     if print_summary:
         print(f'The log file contains {len(filtered_records)} records, {sensitive}, matching regex:\n  r"{regex}"')
 
-    return filtered_records
+    return (filtered_records, filtered_groups)
 
 if __name__ == "__main__":
     print("Please import this file as a module to access its content.")

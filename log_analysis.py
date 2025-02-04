@@ -55,6 +55,18 @@ def get_log_file_path_from_cmd_line():
 
 # TODO: Step 8
 def tally_port_traffic(log_file):
+    # Dictionary where key is the port number and the value is the number of times
+    # the port was seen in the file.
+    by_port = {}  # initially empty
+
+    # Treat this as pseudo-code
+    # do the matching routine, same as above
+        if port_number in by_port:  # Ask if the port number is already in dictionary
+            by_port[port_number] += 1  # Already there, add 1 to the count
+        else:
+            by_port[port_number] = 1  # first time seen in log file.
+    return
+
     return
 
 # TODO: Step 9
