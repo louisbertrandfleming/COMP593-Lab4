@@ -14,16 +14,18 @@ Usage:
 '''
 
 ### Imports
-import re  # Regular expressions
+#import re  # Regular expressions
 import sys  # Need for sys.argv command line parameters
 import os  # Need for path handling
+from log_matching import filter_log_by_regex  # My own module with the convenient matching function
+
 
 def main():
     log_file = get_log_file_path_from_cmd_line()  # Get the file name (Step 3)
     print(f"Analyzing file:\n  {log_file}")  # Test step 3 (we can comment out later)
 
     # Test with a regular expression (first pass, look for sshd)
-    regex = r'sshd'
+    regex = r'SSHD'
     filter_log_by_regex(log_file, regex, ignore_case=True, print_summary=True, print_records=True)
 
     return
@@ -49,52 +51,7 @@ def get_log_file_path_from_cmd_line():
     # No return statement here, all paths through the if-else statements
     # end in a return or an exit. The return statement would be "dead code".
 
-# TODO: Steps 4-7
-def filter_log_by_regex(log_file, regex, ignore_case=True, print_summary=False, print_records=False):
-    """Gets a list of records in a log file that match a specified regex.
-
-    Args:
-        log_file (str): Path of the log file
-        regex (str): Regex filter
-        ignore_case (bool, optional): Enable case insensitive regex matching. Defaults to True.
-        print_summary (bool, optional): Enable printing summary of results. Defaults to False.
-        print_records (bool, optional): Enable printing all records that match the regex. Defaults to False.
-
-    Returns:
-        (list, list): List of records that match regex, List of tuples of captured data
-    """
-    # List of lines to be returned
-    filtered_records = []  # start empty list
-
-    # Set the regex search flag for case sensitivity
-    # Ref: https://docs.python.org/3/library/re.html#re.IGNORECASE
-    if ignore_case:
-        search_flags = re.IGNORECASE
-        sensitive = "ignoring case"  # info string for printing (see below)
-    else:
-        search_flags = 0
-        sensitive = "case sensitive"  # info string for printing (see below)
-
-    # Iterate the log file line by line
-    with open(log_file, 'r') as file:
-        for record in file:
-            # Check each line for regex match
-            match = re.search(regex, record, search_flags)
-            if match:
-                # Add lines that match to list of filtered records
-                # And strip the \n from the end of the line before saving
-                filtered_records.append(record.strip())
-
-    # Print all records, if enabled
-    if print_records:
-        for rec in filtered_records:
-            print(rec)
-
-    # Print summary of results, if enabled
-    if print_summary:
-        print(f'The log file contains {len(filtered_records)} records, {sensitive}, matching regex:\n  {regex}')
-
-    return filtered_records
+# TODO: Steps 4-7 -- this has been moved to the separate module
 
 # TODO: Step 8
 def tally_port_traffic(log_file):
